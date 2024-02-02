@@ -1,0 +1,88 @@
+import random
+import numpy
+import math
+
+
+game_running = True
+
+
+Spaces_list = []
+space_number = 0
+
+
+for i in range(0,50):
+	space_number = space_number + 1
+	Spaces_list.append(space_number)
+
+Snake_spaces = []
+Ladder_spaces = []
+for i in Spaces_list:
+	snake_ladder_decider = random.randint(1, 10)
+	if snake_ladder_decider == 2:
+		Snake_spaces.append(i)
+	if snake_ladder_decider == 3:
+		Ladder_spaces.append(i)
+
+print(Snake_spaces)
+print(Ladder_spaces)
+
+snake_lengths_list = []
+for i in Snake_spaces:
+	snake_length = random.randint(1, i)
+	snake_lengths_list.append(snake_length)
+	
+
+ladder_lengths_list = []
+for i in Ladder_spaces:
+	possible_ladder_length = 50 - i
+	print(possible_ladder_length)
+	ladder_length = random.randint(1, possible_ladder_length)
+	ladder_lengths_list.append(ladder_length)
+
+
+
+print(snake_lengths_list)
+print(ladder_lengths_list)
+
+
+
+player_turn = 1
+
+player_1_space = 0
+player_2_space = 0
+
+while game_running == True:
+	print("it is player",player_turn,"'s turn")
+	player_input = int(input("input 1 to roll die "))
+	Die = random.randint(1,6)
+	
+	if player_turn == 1:
+		player_1_space = player_1_space + Die
+		print("die rolled", Die, "move to space", player_1_space)
+		player_turn = 2
+	else:
+		player_2_space = player_2_space + Die
+		print("die rolled", Die, "move to space", player_2_space)
+		player_turn = 1
+		
+	if player_1_space in Snake_spaces:
+		player_1_space = player_1_space - snake_lengths_list[Snake_spaces.index(player_1_space)]
+	
+	if player_1_space in Ladder_spaces:
+		player_1_space = player_1_space + ladder_lengths_list[Ladder_spaces.index(player_1_space)]
+		
+	if player_2_space in Snake_spaces:
+		player_2_space = player_2_space - snake_lengths_list[Snake_spaces.index(player_2_space)]
+	
+	if player_2_space in Ladder_spaces:
+		player_2_space = player_2_space + ladder_lengths_list[Ladder_spaces.index(player_2_space)]
+		
+		
+		
+		
+		
+		
+		
+	if player_1_space > 49 or player_2_space > 49:
+		game_running = False
+		print("player", player_turn, "won")
