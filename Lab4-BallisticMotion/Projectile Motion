@@ -1,0 +1,74 @@
+
+import math 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+plt.figure()
+
+HitTarget = False
+KinData = []
+ThetaLaunch = 0.2*math.pi
+VLaunch = 10
+TimeInt = 0.01
+x = []
+y = []
+
+for i in range(0,7): #t x y vx vy ax ay
+	KinData.append(0)
+
+KinData[2] = 10
+KinData[6] = 9.8
+KinData[3] = math.cos(ThetaLaunch)*VLaunch
+KinData[4] = math.sin(ThetaLaunch)*VLaunch
+
+
+
+
+
+
+'''while KinData[2]>0:
+	KinData[0] += TimeInt
+	KinData[1] += TimeInt*KinData[3]
+	KinData[2] += TimeInt*KinData[4]
+	KinData[3] += TimeInt*KinData[5]
+	KinData[4] += -TimeInt*KinData[6]
+	KinData[5] = -0.01*KinData[3]
+	KinData[6] += -0.01*KinData[4]
+	x.append(KinData[1])
+	y.append(KinData[2])
+print("landed")'''
+
+while HitTarget == False:
+	ThetaLaunch += 0.01
+	while KinData[2]>0:
+		KinData[0] += TimeInt
+		KinData[1] += TimeInt*KinData[3]
+		KinData[2] += TimeInt*KinData[4]
+		KinData[3] += TimeInt*KinData[5]
+		KinData[4] += -TimeInt*KinData[6]
+		KinData[5] = -0.01*KinData[3]
+		KinData[6] += -0.01*KinData[4]
+		x.append(KinData[1])
+		y.append(KinData[2])
+		Landing = KinData[1]
+		#print(KinData[1])
+	if Landing>17 and Landing<17.5:
+		HitTarget = True
+	else:
+		HitTarget = False
+	print("landed", KinData[1])
+	KinData[1] = 0
+	KinData[2] = 10
+	KinData[3] = math.cos(ThetaLaunch)*VLaunch
+	KinData[4] = math.sin(ThetaLaunch)*VLaunch
+	KinData[5] = 0
+	KinData[6] = 9.8
+
+
+	
+
+	
+
+print(Landing, HitTarget)
+
+plt.plot(x,y,'-')
+plt.show()
