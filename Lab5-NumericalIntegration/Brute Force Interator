@@ -1,0 +1,100 @@
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+
+# curves over intera -5 to 5
+# y=0.5x+4.0
+# y=-0.29x^2-x+12.5
+# y=1.0+10*(x+1.0)*e^(-x^2)
+# real values 40, 605/6, 27.72453850902791
+
+
+'''
+write reiman sum algorithm
+
+run it through a single function
+
+loop that changes deltaX values 
+
+calculate percent error 
+
+plot
+'''
+
+
+
+
+#reiman summ alg
+DeltaXList = [[],[],[]]
+PercentList = [[],[],[]]
+DeltaX = 1
+WorkX = -5
+
+'''
+while WorkX<5:
+	WorkX += DeltaX
+	Area += FatX * DeltaX
+Area+= FatX * (DeltaX - WorkX)
+'''
+
+#single function
+#FatX = -0.5 * WorkX + 4.0 
+
+#change deltax
+for i in range(1,100):
+	WorkX = -5
+	Area = 0
+	DeltaX = 1/(5*i)
+	while WorkX<5:
+		FatX = -0.5 * WorkX + 4.0 
+		WorkX += DeltaX
+		Area += FatX * DeltaX
+		#print(FatX)
+	Area+= FatX * abs(5-DeltaX - WorkX)
+	PercentError = 100 * (abs(Area - 40))/40
+	PercentList[0].append(PercentError)
+	DeltaXList[0].append(i)
+print("area of F1 is approximately", Area)
+
+
+for i in range(1,100):
+	WorkX = -5
+	Area = 0
+	DeltaX = 1/(5*i)
+	while WorkX<5:
+		FatX = -0.29 * WorkX**2 - WorkX + 12.5 
+		WorkX += DeltaX
+		Area += FatX * DeltaX
+		#print(FatX)
+	Area+= FatX * abs(5-DeltaX - WorkX)
+	PercentError = 100 * (abs(Area - 100.83))/100.83
+	PercentList[1].append(PercentError)
+	DeltaXList[1].append(i)
+print("area of F2 is approximately", Area)
+
+
+
+for i in range(1,100):
+	WorkX = -5
+	Area = 0
+	DeltaX = 1/(5*i)
+	while WorkX<5:
+		FatX = 1.0 + 10 * (WorkX + 1) * np.exp(-WorkX**2)
+		WorkX += DeltaX
+		Area += FatX * DeltaX
+		#print(FatX)
+	Area+= FatX * abs(5-DeltaX - WorkX)
+	PercentError = 100 * (abs(Area - 27.72))/27.72
+	PercentList[2].append(PercentError)
+	DeltaXList[2].append(i)
+print("area of F3 is approximately", Area)
+
+
+
+plt.plot(DeltaXList[0], PercentList[0], label = "F1")
+plt.plot(DeltaXList[1], PercentList[1], label = "F2")
+plt.plot(DeltaXList[2], PercentList[2], label = "F3")
+plt.title("Percent Error vs Inverse DeltaX")
+plt.legend()
+plt.show()
