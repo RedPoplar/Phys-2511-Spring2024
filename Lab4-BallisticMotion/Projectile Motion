@@ -1,74 +1,91 @@
-
-import math 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-plt.figure()
 
-HitTarget = False
-KinData = []
-ThetaLaunch = 0.2*math.pi
-VLaunch = 10
-TimeInt = 0.01
-x = []
-y = []
-
-for i in range(0,7): #t x y vx vy ax ay
-	KinData.append(0)
-
-KinData[2] = 10
-KinData[6] = 9.8
-KinData[3] = math.cos(ThetaLaunch)*VLaunch
-KinData[4] = math.sin(ThetaLaunch)*VLaunch
+bookfile = open("pg84.txt", "r", encoding = "utf-8")
+chaptercounter = 0
+chapterline = []
+linenumber = 0 
+CharacterList = ['Caroline', 'creature', 'Agatha', 'Victor', 'William', 'Elizabeth', 'Ernest', 'Felix', 'Henry', 'Justine', 'De Lacey' ]
 
 
 
+#chapter list setup
+for line in bookfile:
+	linenumber += 1 
+	x = line.count("Chapter")
+	chaptercounter += x
+	if x>0:
+		chapterline.append(linenumber)
+del chapterline[0:24] 
+bookfile = open("pg84.txt", "r", encoding = "utf-8")
+
+
+#character list setup
+NameCountList = []
+NameValue = []
+for i in range(0, len(CharacterList)):
+	NameValue.append([])
 
 
 
-'''while KinData[2]>0:
-	KinData[0] += TimeInt
-	KinData[1] += TimeInt*KinData[3]
-	KinData[2] += TimeInt*KinData[4]
-	KinData[3] += TimeInt*KinData[5]
-	KinData[4] += -TimeInt*KinData[6]
-	KinData[5] = -0.01*KinData[3]
-	KinData[6] += -0.01*KinData[4]
-	x.append(KinData[1])
-	y.append(KinData[2])
-print("landed")'''
 
-while HitTarget == False:
-	ThetaLaunch += 0.01
-	while KinData[2]>0:
-		KinData[0] += TimeInt
-		KinData[1] += TimeInt*KinData[3]
-		KinData[2] += TimeInt*KinData[4]
-		KinData[3] += TimeInt*KinData[5]
-		KinData[4] += -TimeInt*KinData[6]
-		KinData[5] = -0.01*KinData[3]
-		KinData[6] += -0.01*KinData[4]
-		x.append(KinData[1])
-		y.append(KinData[2])
-		Landing = KinData[1]
-		#print(KinData[1])
-	if Landing>17 and Landing<17.5:
-		HitTarget = True
-	else:
-		HitTarget = False
-	print("landed", KinData[1])
-	KinData[1] = 0
-	KinData[2] = 10
-	KinData[3] = math.cos(ThetaLaunch)*VLaunch
-	KinData[4] = math.sin(ThetaLaunch)*VLaunch
-	KinData[5] = 0
-	KinData[6] = 9.8
+#Character
+CharacterNumber = 0
+
+for i in range(0,len(CharacterList)):
+	bookfile = open("pg84.txt", "r", encoding = "utf-8")
+	CharacterChapters = []
+	CharacterCounter = 0
+	linenumber = 0
+	for i in range(0, len(chapterline)):
+		CharacterChapters.append(0)
+
+	for line in bookfile:
+		linenumber += 1
+		NameValue[CharacterNumber] = line.count(str(CharacterList[CharacterNumber]))
+		if int(NameValue[CharacterNumber])>0:
+			chapterline.append(linenumber)
+			chapterline.sort()
+			CharacterChapters[chapterline.index(linenumber)-1] += int(NameValue[CharacterNumber])
+			chapterline.remove(linenumber)
+	NameCountList.append(CharacterChapters)	
+
+	CharacterNumber += 1	
 
 
-	
 
-	
 
-print(Landing, HitTarget)
+'''
 
-plt.plot(x,y,'-')
+#victor
+VictorChapters = []
+VictorCounter = 0
+linenumber = 0
+for i in range(0, len(chapterline)):
+	VictorChapters.append(0)
+
+for line in bookfile:
+	linenumber += 1
+	Victor = line.count("Victor")
+	VictorCounter += Victor
+	if Victor>0:
+		chapterline.append(linenumber)
+		chapterline.sort()
+		VictorChapters[chapterline.index(linenumber)-1] += Victor
+		chapterline.remove(linenumber)
+		
+print("victor chapters", VictorChapters)
+bookfile = open("pg84.txt", "r", encoding = "utf-8")
+
+'''
+
+print("Observations: The first thing that stood out to me, was the trend of Creature's mentsions. Creature is the most steadily relevant throughout the whole book, for the most part. However, Creature is almost never the most relevant character. This is interesting, as Creature is arguably the main subject of the story. Secondly, Victor is mentioned surprisingly little throughout the text. This is interesting, as he is the character for which the story is named after. The third interesting trend would be the large spikes in mentions. This could be indicitive of back-and-forth dialogue.  ")
+
+
+bookfile.close()
+
+
+for i in range(0,len(NameCountList)):
+	plt.plot(chapterline , NameCountList[i], label = CharacterList[i])
+plt.legend()
 plt.show()
