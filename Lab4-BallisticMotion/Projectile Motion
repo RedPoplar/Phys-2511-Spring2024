@@ -89,3 +89,4 @@ for i in range(0,len(NameCountList)):
 	plt.plot(chapterline , NameCountList[i], label = CharacterList[i])
 plt.legend()
 plt.show()
+
